@@ -1,0 +1,8 @@
+path: ../datasets/flir_rgba
+train: train/images
+val: val/images
+test: test/images
+
+nc: 2  # number of classes
+ch: 4  # number of channels (RGBA)
+names: ['person', 'car']
