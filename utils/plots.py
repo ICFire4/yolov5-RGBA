@@ -204,7 +204,7 @@ def plot_images(images, targets, paths=None, fname='images.jpg', names=None, max
             break
         x, y = int(w * (i // ns)), int(h * (i % ns))  # block origin
         im = im.transpose(1, 2, 0)
-        mosaic[y:y + h, x:x + w, :] = im
+        mosaic[y:y + h, x:x + w, :] = im[:, :, :3] # in case of a 4 channel image, convert to 3 RGB for visualization
 
     # Resize (optional)
     scale = max_size / ns / max(h, w)

@@ -232,7 +232,7 @@ class LoadImages:
         else:
             # Read image
             self.count += 1
-            img0 = cv2.imread(path)  # BGR
+            img0 = cv2.imread(path, cv2.IMREAD_UNCHANGED)  # BGR
             assert img0 is not None, f'Image Not Found {path}'
             s = f'image {self.count}/{self.nf} {path}: '
 
@@ -658,7 +658,7 @@ class LoadImagesAndLabels(Dataset):
             if fn.exists():  # load npy
                 im = np.load(fn)
             else:  # read image
-                im = cv2.imread(f)  # BGR
+                im = cv2.imread(f, cv2.IMREAD_UNCHANGED)  # BGR
                 assert im is not None, f'Image Not Found {f}'
             h0, w0 = im.shape[:2]  # orig hw
             r = self.img_size / max(h0, w0)  # ratio
@@ -673,7 +673,7 @@ class LoadImagesAndLabels(Dataset):
         # Saves an image as an *.npy file for faster loading
         f = self.npy_files[i]
         if not f.exists():
-            np.save(f.as_posix(), cv2.imread(self.im_files[i]))
+            np.save(f.as_posix(), cv2.imread(self.im_files[i], cv2.IMREAD_UNCHANGED))
 
     def load_mosaic(self, index):
         # YOLOv5 4-mosaic loader. Loads 1 image + 3 random images into a 4-image mosaic

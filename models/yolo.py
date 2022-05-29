@@ -249,7 +249,7 @@ class Model(nn.Module):
         return self
 
 
-def parse_model(d, ch):  # model_dict, input_channels(3)
+def parse_model(d, ch):  # model_dict, input_channels
     LOGGER.info(f"\n{'':>3}{'from':>18}{'n':>3}{'params':>10}  {'module':<40}{'arguments':<30}")
     anchors, nc, gd, gw = d['anchors'], d['nc'], d['depth_multiple'], d['width_multiple']
     na = (len(anchors[0]) // 2) if isinstance(anchors, list) else anchors  # number of anchors
