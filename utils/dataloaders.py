@@ -240,7 +240,8 @@ class LoadImages:
         img = letterbox(img0, self.img_size, stride=self.stride, auto=self.auto)[0]
 
         # Convert
-        img = img.transpose((2, 0, 1))[::-1]  # HWC to CHW, BGR to RGB
+        img = img.transpose((2, 0, 1))  # HWC to CHW
+        img[:3] = img[2::-1] # BGR to RGB
         img = np.ascontiguousarray(img)
 
         return path, img, img0, self.cap, s
@@ -287,7 +288,8 @@ class LoadWebcam:  # for inference
         img = letterbox(img0, self.img_size, stride=self.stride)[0]
 
         # Convert
-        img = img.transpose((2, 0, 1))[::-1]  # HWC to CHW, BGR to RGB
+        img = img.transpose((2, 0, 1))  # HWC to CHW
+        img[:3] = img[2::-1] # BGR to RGB
         img = np.ascontiguousarray(img)
 
         return img_path, img, img0, None, s
@@ -376,7 +378,8 @@ class LoadStreams:
         img = np.stack(img, 0)
 
         # Convert
-        img = img[..., ::-1].transpose((0, 3, 1, 2))  # BGR to RGB, BHWC to BCHW
+        img[..., :3] = img[..., 2::-1] # BGR to RGB
+        img = img.transpose((0, 3, 1, 2))  # BHWC to BCHW
         img = np.ascontiguousarray(img)
 
         return self.sources, img, img0, None, ''
@@ -646,7 +649,8 @@ class LoadImagesAndLabels(Dataset):
             labels_out[:, 1:] = torch.from_numpy(labels)
 
         # Convert
-        img = img.transpose((2, 0, 1))[::-1]  # HWC to CHW, BGR to RGB
+        img = img.transpose((2, 0, 1)) # HWC to CHW
+        img[:3] = img[2::-1] # BGR to RGB
         img = np.ascontiguousarray(img)
 
         return torch.from_numpy(img), labels_out, self.im_files[index], shapes
@@ -868,7 +872,8 @@ def extract_boxes(path=DATASETS_DIR / 'coco128'):  # from utils.datasets import 
     for im_file in tqdm(files, total=n):
         if im_file.suffix[1:] in IMG_FORMATS:
             # image
-            im = cv2.imread(str(im_file))[..., ::-1]  # BGR to RGB
+            im = cv2.imread(str(im_file))
+            im[..., :3] = im[..., 2::-1]  # BGR to RGB
             h, w = im.shape[:2]
 
             # labels
